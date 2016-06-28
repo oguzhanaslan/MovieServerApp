@@ -12,7 +12,7 @@ var db = mongoose.connection;
 // Cross Domain Settings
 // app.use(allowCrossDomain);
 // app.use(domainBlock);
- 
+
 app.use(express.static(__dirname+'/client'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -30,7 +30,7 @@ app.get('/', function(req, res){
 });
 
 // get All Movies
-app.get('/api/getAllMovies/', function(req, res){
+app.get('/api/movies/', function(req, res){
 	Movie.find({}, function(err, result) {
   	if (err) throw err;
   	res.json(result)
@@ -38,13 +38,27 @@ app.get('/api/getAllMovies/', function(req, res){
 });
 
 // get movie in category
-app.get('/api/movies/:_genre', function(req, res){
-  var genre = req.params._genre;
-	Movie.find({category: genre}, function(err, result) {
+app.get('/api/category/:category', function(req, res){
+  var category = req.params.category;
+	Movie.find({category: category}, function(err, result) {
   	if (err) throw err;
   	res.json(result)
 	});
 });
+
+// get single movie
+app.get('/api/movies/:id', function(req, res){
+	if (req.params.id) {
+		Movie.findOne({_id : req.params.id}, function(err, result) {
+			if (err){
+				res.status(500).send('Something broke!');
+			}
+	  	res.json(result)
+		});
+	}
+});
+
+
 
 // app.delete('/api/genres/:_id', function(req, res){
 // 	var id = req.params._id;
