@@ -58,6 +58,19 @@ app.get('/api/movies/:id', function(req, res){
 	}
 });
 
+//  delete movies
+app.delete('/api/movies/:id', function(req, res){
+	// var query = req.params.id;
+	Movie.findOneAndRemove({_id : req.params.id}, function(err, result){
+		if(err){
+			res.status(500).send('Something broke!');
+		}
+		res.json(result);
+		console.log('User deleted!');
+	});
+});
+
+//  create movies
 app.post('/api/movies', function(req, res){
 	var movie = req.body;
 	Movie.create(movie, function(err, result){
@@ -67,6 +80,9 @@ app.post('/api/movies', function(req, res){
 		res.json(result);
 	});
 });
+
+
+
 
 
 
