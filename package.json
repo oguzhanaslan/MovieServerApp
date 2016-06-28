@@ -1,0 +1,20 @@
+{
+  "name": "Movie Api Project",
+  "version": "1.0.0",
+  "description": "Simple movie app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "express": "*",
+    "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.1.0",
+    "mongoose": "*",
+    "morgan": "^1.7.0",
+    "nodemon": "^1.9.2"
+  },
+  "author": "Brad Traversy",
+  "license": "ISC"
+}
