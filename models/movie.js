@@ -9,7 +9,7 @@ var movieSchema = mongoose.Schema({
   pilot:{
     type: String,
   },
-	thumbnail:{
+	thumbnailUrl:{
 		type: String,
 		required: true
 	},
@@ -20,9 +20,8 @@ var movieSchema = mongoose.Schema({
   tags:{
     type: Array,
   },
-  photos:{
-    type: String,
-    required: true
+  photosInMovie:{
+    type: Array,
   },
   videoLink:{
     type: String,

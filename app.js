@@ -3,12 +3,14 @@ var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var morgan      = require('morgan');
-var url = require('url'); // standard node module
 var configDB = require('./config/database.js');
 var helper = require('./config/helper.js');
+var url = require('url'); // standard node module
 
+// Connect to Mongoose
 mongoose.connect(configDB.url); // connect to our database
 var db = mongoose.connection;
+
 // Cross Domain Settings
 // app.use(allowCrossDomain);
 // app.use(domainBlock);
@@ -20,9 +22,7 @@ app.use(morgan('dev'));
 
 // Calling Model files
 // Genre =require('./models/genre');
-Movie =require('./models/movie');
-
-// Connect to Mongoose
+Movie = require('./models/movie');
 
 //  Default Url
 app.get('/', function(req, res){
@@ -56,6 +56,16 @@ app.get('/api/movies/:id', function(req, res){
 	  	res.json(result)
 		});
 	}
+});
+
+app.post('/api/movies', function(req, res){
+	var movie = req.body;
+	Movie.create(movie, function(err, result){
+		if(err){
+			throw err;
+		}
+		res.json(result);
+	});
 });
 
 
