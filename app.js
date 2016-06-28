@@ -9,7 +9,10 @@ var url = require('url'); // standard node module
 
 // Connect to Mongoose
 mongoose.connect(configDB.url); // connect to our database
-var db = mongoose.connection;
+mongoose.connection.on('error', () => {
+  console.log('MongoDB connection error. Please make sure that MongoDB is running.');
+  process.exit(1);
+});
 
 // Cross Domain Settings
 // app.use(allowCrossDomain);
@@ -60,13 +63,40 @@ app.get('/api/movies/:id', function(req, res){
 
 //  delete movies
 app.delete('/api/movies/:id', function(req, res){
-	// var query = req.params.id;
 	Movie.findOneAndRemove({_id : req.params.id}, function(err, result){
 		if(err){
 			res.status(500).send('Something broke!');
 		}
 		res.json(result);
 		console.log('User deleted!');
+	});
+});
+
+//  update movies
+app.put('/api/movies/:id', function(req, res){
+	var id = req.params._id;
+	var movie = req.body;
+	var update = {
+		title: movie.title,
+		pilot: movie.pilot,
+		thumbnailUrl: movie.thumbnailUrl,
+		category: movie.category,
+		tags: movie.tags,
+		photosInMovie: movie.photosInMovie,
+		videoLink: movie.videoLink,
+		director: movie.director,
+		writers: movie.writers,
+		stars: movie.stars,
+		movie_date: movie.movie_date,
+		language: movie.language,
+		imbdPoint: movie.imbdPoint,
+	}
+	Movie.findOneAndUpdate(id, update, function(err, result){
+		if(err){
+			throw err;
+		}
+		res.json(result);
+		console.log("Update Basariyla Gerceklestirildi")
 	});
 });
 
@@ -80,10 +110,6 @@ app.post('/api/movies', function(req, res){
 		res.json(result);
 	});
 });
-
-
-
-
 
 
 // app.delete('/api/genres/:_id', function(req, res){
