@@ -1,3 +1,4 @@
 module.exports = {
-  'url' : 'mongodb://localhost/bookstore'
+  'secret' : 'devdacticIsAwesome',
+  'url'    : 'mongodb://localhost/bookstore'
 };
