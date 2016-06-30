@@ -1,8 +1,11 @@
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt');
+var Schema   = mongoose.Schema;
+
+require('./comments');
 
 // set up a mongoose model
-var UserSchema = mongoose.Schema({
+var UserSchema = new mongoose.Schema({
   name: {
       type    : String,
       unique  : true,
@@ -17,7 +20,11 @@ var UserSchema = mongoose.Schema({
   },
   age : {
     type: Number
-  }
+  },
+  comments:[{
+		type: Schema.Types.ObjectId,
+		ref: 'Comment'
+	}],
 });
 
 UserSchema.pre('save', function(next) {
@@ -49,4 +56,4 @@ UserSchema.methods.comparePassword = function(passw, cb) {
   });
 };
 
-module.exports = mongoose.model('User', UserSchema);
+var User = module.exports = mongoose.model('User', UserSchema);

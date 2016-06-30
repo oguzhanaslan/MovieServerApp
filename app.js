@@ -1,20 +1,19 @@
-var express    = require('express');
-var app        = express();
+var express = require('express');
+var app = express();
 var bodyParser = require('body-parser');
-var morgan     = require('morgan');
-var mongoose   = require('mongoose');
-var passport   = require('passport');
-var configDB   = require('./config/database.js');
-var helper     = require('./config/helper.js');
-var jwt        = require('jwt-simple');
-var url        = require('url');
+var morgan = require('morgan');
+var mongoose = require('mongoose');
+var passport = require('passport');
+var configDB = require('./config/database.js');
+var jwt = require('jwt-simple');
+
 // Calling Model files
-var Movie      = require('./models/movie');
-var User       = require('./models/user');
-var Comment    = require('./models/comments');
+var Movie = require('./models/movie');
+var User = require('./models/user');
+var Comment = require('./models/comments');
 
 require('./config/passport')(passport);
-
+app.use(passport.initialize());
 // Connect to Mongoose
 mongoose.connect(configDB.url); // connect to our database
 mongoose.connection.on('error', () => {
@@ -23,8 +22,18 @@ mongoose.connection.on('error', () => {
 });
 
 // Cross Domain Settings
-// app.use(allowCrossDomain);
-// app.use(domainBlock);
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    // CORS res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    if ('OPTIONS' == req.method) {
+        res.send(200);
+    } else {
+        next();
+    }
+};
+app.use(allowCrossDomain);
 
 app.use(express.static(__dirname + '/client'));
 app.use(bodyParser.json());
@@ -38,12 +47,14 @@ app.get('/', function(req, res) {
     res.send('Hello! The API is at http://localhost:' + 3000);
 });
 
-// get All Movies
 app.get('/api/movies/', function(req, res) {
-    Movie.find({}, function(err, result) {
-        if (err) throw err;
-        res.json(result)
-    });
+    Movie.find({})
+        .populate('comments')
+        .exec(function(err, result) {
+            if (err) throw err;
+            res.json(result)
+        });
+
 });
 
 // get movie in category
@@ -123,25 +134,36 @@ app.post('/api/movies', function(req, res) {
     });
 });
 
-
 //add comment
-app.post('/api/movies/:id', function(req, res) {
+app.post('/api/movies/:id', passport.authenticate('jwt', {
+    session: false
+}), function(req, res) {
     Movie.findOne({
         _id: req.params.id
     }, function(err, movie) {
         var comment = new Comment(req.body);
-        comment._movie = movie._id;
-        movie.comments.push(comment);
-        comment.save(function(err) {
-            console.log(err)
-            movie.save(function(err) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.json("basarili gonderildi");
-                }
+        var token = getToken(req.headers);
+        if (token) {
+            var decoded = jwt.decode(token, configDB.secret);
+            comment._user = decoded._id;
+            comment.user_name = decoded.name;
+            comment.user_thumbnail = decoded.thumbnail;
+            comment.user_age = decoded.age;
+            comment._movie = movie._id;
+            movie.comments.push(comment);
+            comment.save(function(err) {
+                console.log(err)
+                movie.save(function(err) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        res.json("gonderildi");
+                    }
+                })
             })
-        })
+        } else {
+            console.log(err);
+        }
     })
 })
 
@@ -150,7 +172,7 @@ app.post('/api/signup', function(req, res) {
     if (!req.body.name || !req.body.password) {
         res.json({
             success: false,
-            msg: 'Please pass name and password.'
+            msg: 'Kullanıcı adını veya şifresini yanlış girdiniz.'
         });
     } else {
         var newUser = new User({
@@ -162,12 +184,12 @@ app.post('/api/signup', function(req, res) {
             if (err) {
                 return res.json({
                     success: false,
-                    msg: 'Username already exists.'
+                    msg: 'Bu kullanıcı adı kullanılıyor.'
                 });
             }
             res.json({
                 success: true,
-                msg: 'Successful created new user.'
+                msg: 'Üyeliğiniz oluşturuldu.'
             });
         });
     }
@@ -207,15 +229,15 @@ app.post('/api/authenticate', function(req, res) {
     });
 });
 
-// route to authenticate a user (POST http://localhost:8080/api/authenticate)
-// ...
 
+// route to authenticate a user (POST http://localhost:8080/api/authenticate)
 // route to a restricted info (GET http://localhost:8080/api/memberinfo)
 app.get('/api/memberinfo', passport.authenticate('jwt', {
     session: false
 }), function(req, res) {
     var token = getToken(req.headers);
     if (token) {
+
         var decoded = jwt.decode(token, configDB.secret);
         User.findOne({
             name: decoded.name
@@ -231,7 +253,8 @@ app.get('/api/memberinfo', passport.authenticate('jwt', {
                 res.json({
                     success: true,
                     username: user.name,
-                    msg: 'Welcome in the member area ' + user.name + '!'
+                    id: user._id,
+                    msg: 'Welcome in the member area ' + user.name + '!',
                 });
             }
         });
