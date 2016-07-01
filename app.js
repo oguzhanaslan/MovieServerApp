@@ -266,6 +266,13 @@ app.get('/api/memberinfo', passport.authenticate('jwt', {
     }
 });
 
+app.all('*', function(req,res){
+  res.status(404).json({
+    success :false,
+    data : 'Not Found'
+  })
+});
+
 getToken = function(headers) {
     if (headers && headers.authorization) {
         var parted = headers.authorization.split(' ');
