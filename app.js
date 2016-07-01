@@ -1,13 +1,10 @@
-var express = require('express');
-var app = express();
+var express    = require('express');
+var app        = express();
 var bodyParser = require('body-parser');
-var morgan = require('morgan');
-var mongoose = require('mongoose');
-var passport = require('passport');
-var configDB = require('./config/database.js');
-var jwt = require('jwt-simple');
-var fs = require('fs');
-require('./config/passport')(passport);
+var morgan     = require('morgan');
+var mongoose   = require('mongoose');
+var configDB   = require('./config/database.js');
+var fs         = require('fs');
 
 // Cross Domain Settings
 var allowCrossDomain = function(req, res, next) {
@@ -23,7 +20,6 @@ var Movie = require('./models/movie');
 var User = require('./models/user');
 var Comment = require('./models/comments');
 
-app.use(passport.initialize());
 app.use(allowCrossDomain);
 app.use(express.static(__dirname + '/client'));
 app.use(bodyParser.json());
@@ -31,8 +27,6 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(morgan('dev'));
-
-
 
 // Connect to Mongoose
 mongoose.connect(configDB.url); // connect to our database
