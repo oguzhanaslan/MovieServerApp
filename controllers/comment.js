@@ -3,6 +3,9 @@ var Movie = require('../models/movie');
 var User = require('../models/user');
 var Comment = require('../models/comments');
 var passport = require('passport');
+var jwt = require('jwt-simple');
+var configDB   = require('../config/database.js');
+
 
 module.exports.controller = function(app) {
   //add comment

@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var morgan     = require('morgan');
 var mongoose   = require('mongoose');
 var configDB   = require('./config/database.js');
+var jwt = require('jwt-simple');
 var fs         = require('fs');
 
 // Cross Domain Settings

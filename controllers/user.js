@@ -4,6 +4,8 @@ var User = require('../models/user');
 var Comment = require('../models/comments');
 var passport = require('passport');
 var jwt = require('jwt-simple');
+var configDB   = require('../config/database.js');
+
 require('../config/passport')(passport);
 
 module.exports.controller = function(app) {

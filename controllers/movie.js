@@ -3,6 +3,7 @@ var Movie = require('../models/movie');
 var User = require('../models/user');
 var Comment = require('../models/comments');
 var passport = require('passport');
+var configDB   = require('../config/database.js');
 
 module.exports.controller = function(app) {
   app.get('/api/movies/', function(req, res) {
