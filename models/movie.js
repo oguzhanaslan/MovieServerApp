@@ -1,6 +1,9 @@
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 require('./comments');
+require('./watched');
+
 
 // Book Schema
 var movieSchema = new mongoose.Schema({
@@ -58,6 +61,10 @@ var movieSchema = new mongoose.Schema({
 	comments:[{
 		type: Schema.Types.ObjectId,
 		ref: 'Comment'
+	}],
+	watched_movie:[{
+		type: Schema.Types.ObjectId,
+		ref: 'Watched'
 	}],
 });
 

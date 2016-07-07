@@ -1,5 +1,8 @@
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
+
+
 require('./movie');
 require('./user');
 
