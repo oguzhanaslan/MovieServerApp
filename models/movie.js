@@ -60,10 +60,6 @@ var movieSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Comment'
 	}],
-	watched_movie:[{
-		type: Schema.Types.ObjectId,
-		ref: 'Watched'
-	}],
 });
 
 var Movie = module.exports = mongoose.model('Movie', movieSchema);

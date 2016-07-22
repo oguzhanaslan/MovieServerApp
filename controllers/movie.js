@@ -11,8 +11,10 @@ module.exports.controller = function(app) {
           .populate('comments')
           .populate('user')
           .exec(function(err, result) {
-              if (err) throw err;
-              res.json(result)
+            if (err) {
+                res.status(500).send('Something broke!');
+            }
+            res.json(result)
           });
   });
 
@@ -86,10 +88,10 @@ module.exports.controller = function(app) {
   app.post('/api/movies', function(req, res) {
       var movie = req.body;
       Movie.create(movie, function(err, result) {
-          if (err) {
-              throw err;
-          }
-          res.json(result);
+        if (err) {
+            res.status(500).send('Something broke!');
+        }
+        res.json("Success")
       });
   });
 }
