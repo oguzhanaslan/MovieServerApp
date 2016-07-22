@@ -2,8 +2,6 @@ var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 require('./comments');
-require('./watched');
-
 
 // Book Schema
 var movieSchema = new mongoose.Schema({

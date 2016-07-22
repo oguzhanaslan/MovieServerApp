@@ -2,11 +2,8 @@ var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt');
 var Schema   = mongoose.Schema;
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
-
-
 require('./comments');
 require('./user');
-require('./watched');
 
 // set up a mongoose model
 var UserSchema = new mongoose.Schema({
