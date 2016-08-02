@@ -9,7 +9,7 @@ var configDB = require('../config/database.js');
 module.exports.controller = function(app) {
 
     // Add a comment
-    app.post('/api/movies/:id', passport.authenticate('jwt', {
+    app.post('/api/watched/:id', passport.authenticate('jwt', {
         session: false
     }), function(req, res) {
         Movie.findOne({

@@ -9,7 +9,6 @@ module.exports.controller = function(app) {
   app.get('/api/movies/', function(req, res) {
       Movie.find({})
           .populate('comments')
-          .populate('user')
           .exec(function(err, result) {
             if (err) {
                 res.status(500).send('Something broke!');

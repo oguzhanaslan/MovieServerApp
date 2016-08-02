@@ -4,6 +4,7 @@ var Schema   = mongoose.Schema;
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 require('./comments');
 require('./user');
+require('./watched');
 
 // set up a mongoose model
 var UserSchema = new mongoose.Schema({
@@ -31,6 +32,10 @@ var UserSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Comment'
 	}],
+  watched:[{
+    type: Schema.Types.ObjectId,
+    ref: 'Watched'
+  }],
 });
 
 UserSchema.pre('save', function(next) {
