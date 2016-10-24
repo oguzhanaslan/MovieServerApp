@@ -1,6 +1,5 @@
-var mongoose = require('mongoose');
-var Schema   = mongoose.Schema;
-var deepPopulate = require('mongoose-deep-populate')(mongoose);
+var mongoose     = require('mongoose');
+var Schema       = mongoose.Schema;
 
 require('./movie');
 require('./user');
@@ -14,8 +13,8 @@ var commentSchema = new mongoose.Schema({
         ref: 'Movie'
     },
     _user: {
-      type: Schema.Types.ObjectId,
-      ref: 'User'
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     },
     user_name: String,
     user_age: String,
