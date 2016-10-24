@@ -9,7 +9,7 @@ module.exports.controller = function(app) {
   app.get('/api/movies/', function(req, res) {
       Movie.find({}).populate('comments').exec(function(err, result) {
           if (err) {
-              res.status(500).send('Something broke!');
+            res.status(500).send('Something broke!');
           }
           res.json(result)
       });
@@ -22,8 +22,8 @@ module.exports.controller = function(app) {
           category: category
       }, function(err, result) {
           if (err)
-              throw err;
-          res.json(result)
+              res.status(500).send('Something broke!');
+          res.json(result);
       }).populate('comments');
     });
 
@@ -50,7 +50,6 @@ module.exports.controller = function(app) {
               res.status(500).send('Something broke!');
           }
           res.json(result);
-          console.log('User deleted!');
       });
     });
 
@@ -75,7 +74,7 @@ module.exports.controller = function(app) {
       }
       Movie.findOneAndUpdate(id, update, function(err, result) {
           if (err) {
-              throw err;
+            res.status(404).send('Something broke!');
           }
           res.json(result);
           console.log("Update Basariyla Gerceklestirildi")
@@ -87,9 +86,9 @@ module.exports.controller = function(app) {
       var movie = req.body;
       Movie.create(movie, function(err, result) {
           if (err) {
-              res.status(500).send('Something broke!');
+            res.status(500).send('Something broke!');
           }
-          res.json("Success")
+          res.json("Success");
       });
     });
 }

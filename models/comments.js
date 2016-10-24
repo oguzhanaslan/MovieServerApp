@@ -9,19 +9,19 @@ var commentSchema = new mongoose.Schema({
     name: String,
     text: String,
     _movie: {
-        type: Schema.Types.ObjectId,
-        ref: 'Movie'
+      type: Schema.Types.ObjectId,
+      ref: 'Movie'
     },
     _user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+      type: Schema.Types.ObjectId,
+      ref: 'User'
     },
     user_name: String,
     user_age: String,
     user_thumbnail: String,
     updated_at: {
-        type: Date,
-        default: new Date
+      type: Date,
+      default: new Date
     }
 });
 
