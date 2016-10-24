@@ -7,7 +7,6 @@ var jwt      = require('jwt-simple');
 var configDB = require('../config/database.js');
 
 module.exports.controller = function(app) {
-
     // Add a comment
     app.post('/api/movies/:id', passport.authenticate('jwt', {
         session: false
